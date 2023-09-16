@@ -26,7 +26,7 @@ operation="";
 operationCheck=false;
 
 }
-// let buttonClicked="";
+let buttonClicked="";
 
 //Functions
 
@@ -43,7 +43,7 @@ function setDisplay(){
 
 function add(a, b) {
 
-    let result = a + b;
+    let result = Math.round((a+b) * 100000000) / 100000000; 
 
     return result;
 
@@ -53,7 +53,7 @@ function add(a, b) {
 
 function subtract(a, b) {
 
-    let result = a - b;
+    let result = Math.round((a -b) * 100000000) / 100000000; 
 
     return result;
 
@@ -63,7 +63,7 @@ function subtract(a, b) {
 
 function multiply(a, b) {
 
-    let result = a * b;
+    let result = Math.round(a * b * 100000000) / 100000000; ;
     if (result.toString().length > 5){
         result = result.toExponential(4);
     }
@@ -165,7 +165,9 @@ function setCalculator() {
             DivRow.append(button);
         }
     }
-    
+    }
+
+   
     function updateDisplay(newValue, buttonClicked){
 
         if (buttonClicked == 'number'){
@@ -224,7 +226,7 @@ function setCalculator() {
         }
         else if (buttonClicked == 'operation'){
             //did not add operand one as it will always have a value (zero or other), but if operation is clicked, this value will be used in calculation.
-            
+
             if (operandTwo == ""){
                 operation = newValue;
                 console.log(operation);
@@ -258,46 +260,68 @@ function setCalculator() {
 
     setDisplay();
 
-    let buttons = document.querySelectorAll('div.button');
+    const buttons = document.querySelectorAll('div.button');
     let btns = [];
     btns = Array.from(buttons);
     // button.map((b)=>console.log(b));
 
-    let buttonText = ['A/C','+/-','%','/','7','8','9','*','4','5','6','-','1','2','3','+','0','<--','.','='];
-    let keyCode = ['A/C','+/-','%','/','7','8','9','*','4','5','6','-','1','2','3','+','0','<--','.','='];
-        
+    const buttonText = ['A/C','+/-','%','/','7','8','9','*','4','5','6','-','1','2','3','+','0','<--','.','='];
+    const keyCode = ['A/C','+/-','%','/','7','8','9','*','4','5','6','-','1','2','3','+','0','<--','.','='];
+    
+    function resetColors(){
+
+        for (let i = 0; i<buttonText.length;i++){
+            
+                btns[i].className = 'button';
+            }
+    }
     for (let i=0;i<buttonText.length;i++)
     {
         btns[i].textContent = buttonText[i];
     }
 
+    function addComa(){
+
+        if (operandTwo ==""){
+            displayValue = displayValue + '.';
+        }
+        else{
+            operandTwo = displayValue + '.'
+            displayValue = operandTwo;
+        }
+        
+        setDisplay();
+
+        btns[18].removeEventListener('click', addComa);
+    }
+
     
-    btns[0].addEventListener('click', ()=>{displayValue = "0"; resetValues(); setDisplay();});
-    btns[1].addEventListener('click', ()=>{displayValue = -displayValue; setDisplay();})        
-    btns[2].addEventListener('click', ()=>{displayValue = displayValue/100; setDisplay();})     
-    btns[3].addEventListener('click', ()=>{updateDisplay('/','operation'); setDisplay();})                                                   
-    btns[4].addEventListener('click', ()=>{updateDisplay('7','number'); setDisplay();})
-    btns[5].addEventListener('click', ()=>{updateDisplay('8','number'); setDisplay();})
-    btns[6].addEventListener('click', ()=>{updateDisplay('9','number'); setDisplay();})
-    btns[7].addEventListener('click', ()=>{updateDisplay('*','operation'); setDisplay();})
-    btns[8].addEventListener('click', ()=>{updateDisplay('4','number'); setDisplay();})
-    btns[9].addEventListener('click', ()=>{updateDisplay('5','number'); setDisplay();})
-    btns[10].addEventListener('click', ()=>{updateDisplay('6','number'); setDisplay();})
-    btns[11].addEventListener('click', ()=>{updateDisplay('-','operation'); setDisplay();})
-    btns[12].addEventListener('click', ()=>{updateDisplay('1','number'); setDisplay();})
-    btns[13].addEventListener('click', ()=>{updateDisplay('2','number'); setDisplay();})
-    btns[14].addEventListener('click', ()=>{updateDisplay('3','number'); setDisplay();})
-    btns[15].addEventListener('click', ()=>{updateDisplay('+','operation'); setDisplay();})
-    btns[16].addEventListener('click', ()=>{updateDisplay('0','number'); setDisplay();})
-    btns[17].addEventListener('click', ()=>{if (displayValue.length>1){displayValue = displayValue.slice(0,-1)}else{displayValue=0}; setDisplay();})
-    btns[18].addEventListener('click', ()=>{displayValue = displayValue + '.'; setDisplay();})
-    btns[19].addEventListener('click', ()=>{updateDisplay('=','result'); setDisplay();})
+    btns[0].addEventListener('click', ()=>{displayValue = "0"; resetValues(); setDisplay();resetColors(); btns[18].addEventListener('click', addComa);});
+    btns[1].addEventListener('click', ()=>{displayValue = -displayValue; setDisplay();});
+    btns[2].addEventListener('click', ()=>{displayValue = displayValue/100; setDisplay();});
+    btns[3].addEventListener('click', ()=>{updateDisplay('/','operation'); setDisplay(); resetColors(); btns[3].className = 'buttonClicked'; btns[18].addEventListener('click', addComa);});                                                 
+    btns[4].addEventListener('click', ()=>{updateDisplay('7','number'); setDisplay();});
+    btns[5].addEventListener('click', ()=>{updateDisplay('8','number'); setDisplay();});
+    btns[6].addEventListener('click', ()=>{updateDisplay('9','number'); setDisplay();});
+    btns[7].addEventListener('click', ()=>{updateDisplay('*','operation'); setDisplay(); resetColors(); btns[7].className = 'buttonClicked'; btns[18].addEventListener('click', addComa);});
+    btns[8].addEventListener('click', ()=>{updateDisplay('4','number'); setDisplay();});
+    btns[9].addEventListener('click', ()=>{updateDisplay('5','number'); setDisplay();});
+    btns[10].addEventListener('click', ()=>{updateDisplay('6','number'); setDisplay();});
+    btns[11].addEventListener('click', ()=>{updateDisplay('-','operation'); setDisplay();resetColors(); btns[11].className = 'buttonClicked'; btns[18].addEventListener('click', addComa);});
+    btns[12].addEventListener('click', ()=>{updateDisplay('1','number'); setDisplay();});
+    btns[13].addEventListener('click', ()=>{updateDisplay('2','number'); setDisplay();});
+    btns[14].addEventListener('click', ()=>{updateDisplay('3','number'); setDisplay();});
+    btns[15].addEventListener('click', ()=>{updateDisplay('+','operation'); setDisplay();resetColors(); btns[15].className = 'buttonClicked'; btns[18].addEventListener('click', addComa);});
+    btns[16].addEventListener('click', ()=>{updateDisplay('0','number'); setDisplay();});
+    btns[17].addEventListener('click', ()=>{if (displayValue.length>1){displayValue = displayValue.slice(0,-1)}else{displayValue=0}; setDisplay();});
+    btns[18].addEventListener('click', addComa);
+    btns[19].addEventListener('click', ()=>{updateDisplay('=','result'); resetColors(); setDisplay();});
     
     
     
 
 
-}
+
 
 
 

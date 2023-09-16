@@ -59,3 +59,18 @@
     background: rgb(12, 124, 175);
 }
 
+.buttonClicked{
+
+    border: 3px rgb(121, 5, 5) solid;
+    border-radius: 10px;
+    min-width: 56px;
+    padding: 13px 0px;
+    margin: 5px;
+    background: rgb(43, 226, 52);
+    color: white;
+    text-align: center;
+    font-size: 1.1rem;
+    cursor: pointer;
+
+}
+
